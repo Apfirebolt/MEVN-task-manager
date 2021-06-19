@@ -30,6 +30,7 @@ yarn-error.log*
 .vscode/settings.json
 
 # Web storm IDE
+.idea
 
 # User-specific stuff
 .idea/**/workspace.xml
