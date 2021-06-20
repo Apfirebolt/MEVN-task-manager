@@ -1,0 +1,28 @@
+/*
+    Media Query Mixins Ordered as per increase in size
+*/
+
+@mixin sm-screen {
+  @media only screen and (min-width: 600px) {
+    @content;
+  }
+}
+
+@mixin md-screen {
+  @media only screen and (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin lg-screen {
+  @media only screen and (min-width: 992px) {
+    @content;
+  }
+}
+
+@mixin xlg-screen {
+  @media only screen and (min-width: 1200px) {
+    @content;
+  }
+}
+

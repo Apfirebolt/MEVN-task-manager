@@ -8,6 +8,8 @@ import events from './plugins/events';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
+import '@/scss/main.scss';
+
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 

@@ -1,6 +1,8 @@
 <template>
   <div class="container-fluid">
-    <h1>Footer</h1>
+    <p class="text-center my-3">
+      My Task Manager@2021 all rights reserved
+    </p>
   </div>
 </template>
 

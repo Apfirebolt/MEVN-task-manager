@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header-component />
+    <header-component :user-data="profileData" />
     <router-view />
     <footer-component />
   </div>
@@ -17,16 +17,18 @@ export default {
   },
   data() {
     return {
-      user: {},
+      profileData: {},
     };
   },
   mounted() {
-    this.getUser();
+    this.getProfileData();
   },
   methods: {
-    async getUser() {
-      const userData = await this.$http.get('users');
-      this.user = userData;
+    async getProfileData() {
+      const response = await this.$http.get('users/profile');
+      if (response) {
+        this.profileData = response;
+      }
     },
   },
 };

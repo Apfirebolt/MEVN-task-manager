@@ -31,7 +31,7 @@ const routes = [
     component: DashboardLayout,
     children: [
       {
-        path: '',
+        path: 'dashboard',
         name: 'profile_dashboard',
         component: () => import('../views/profile/dashboard.vue'),
       },
@@ -39,6 +39,11 @@ const routes = [
         path: 'profile',
         name: 'profile_settings',
         component: () => import('../views/profile/profile.vue'),
+      },
+      {
+        path: 'settings',
+        name: 'account_settings',
+        component: () => import('../views/profile/settings.vue'),
       },
     ],
   },

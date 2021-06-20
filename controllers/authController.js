@@ -35,8 +35,9 @@ module.exports.registerUser = (async (req, res) => {
         const userExists = await User.findOne({ email })
 
         if (userExists) {
-            res.status(409)
-            throw new Error('User already exists')
+            res.status(409).json({
+                message: 'User already exists'
+            })
         }
 
         const user = await User.create({
@@ -68,9 +69,6 @@ module.exports.registerUser = (async (req, res) => {
 
 module.exports.getUserProfile = (async (req, res) => {
     try {
-        res.json({
-            name: 'Boom'
-        })
         const user = await User.findById(req.user._id)
 
         if (user) {
@@ -84,6 +82,43 @@ module.exports.getUserProfile = (async (req, res) => {
         } else {
             res.status(404)
             throw new Error('User not found')
+        }
+    } catch(err) {
+        res.status(400).json({
+            message: err.message ? err.message : 'Please login to continue'
+        });
+    }
+})
+
+
+module.exports.updateUserProfile = (async (req, res) => {
+    try {
+        const updatedProfile = await User.findOneAndUpdate({_id: req.user._id}, req.body, {
+            returnOriginal: false
+        });
+        if (updatedProfile) {
+            res.status(200).json({
+                message: 'Profile successfully updated',
+                data: updatedProfile
+            })
+        }
+    } catch(err) {
+        res.status(404).json({
+            message: err.message ? err.message : 'Some error occurred'
+        });
+    }
+})
+
+module.exports.updatePassword = (async (req, res) => {
+    try {
+        const changedPassword = await User.findOneAndUpdate({_id: req.user._id}, req.body, {
+            returnOriginal: false
+        });
+        if (changedPassword) {
+            res.status(200).json({
+                message: 'Password successfully updated',
+                data: changedPassword
+            })
         }
     } catch(err) {
         res.status(400).json({

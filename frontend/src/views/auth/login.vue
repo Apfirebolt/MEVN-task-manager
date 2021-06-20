@@ -2,9 +2,7 @@
   <b-container class="container auth-form mx-auto p-3 my-3">
     <b-row>
       <b-col>
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium, mollitia. Facere rem dolor placeat assumenda sed. Cum quos natus voluptatem.
-        </p>
+        <hero-component />
       </b-col>
       <b-col class="bg-white shadow m-3 p-3">
         <h3 class="text-center my-4">
@@ -42,7 +40,7 @@
           <b-button type="reset" variant="danger" class="m-2">
             Reset
           </b-button>
-          <router-link :to="{ name: 'Register'}" tag="p" class="link-tag">
+          <router-link :to="{ name: 'Register'}" class="link-tag">
             Not a member yet ? Please sign up here!
           </router-link>
         </b-form>
@@ -52,8 +50,13 @@
 </template>
 
 <script>
+import HeroComponent from '../../components/common/hero.vue';
+
 export default {
   name: 'LoginPage',
+  components: {
+    HeroComponent,
+  },
   data() {
     return {
       form: {
@@ -63,16 +66,7 @@ export default {
       errors: [],
     };
   },
-  mounted() {
-    this.getResponse();
-  },
   methods: {
-    async getResponse() {
-      const response = await this.$http.get('users');
-      if (response) {
-        console.log('Response ', response);
-      }
-    },
     async onSubmit() {
       if (this.form.email && this.form.password) {
         const loginResponse = await this.$http.post('users/signin', this.form);
@@ -83,7 +77,7 @@ export default {
             autoHideDelay: 6000,
             variant: 'success',
           });
-          this.$router.push({ name: 'dashboard' });
+          await this.$router.push({ name: 'profile_dashboard' });
         }
       }
       if (!this.form.email) {

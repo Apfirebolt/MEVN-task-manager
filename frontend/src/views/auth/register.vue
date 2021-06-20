@@ -2,10 +2,7 @@
   <b-container class="container auth-form mx-auto p-3 my-3">
     <b-row>
       <b-col>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-          Sit quibusdam quo nobis facilis odio vitae ex doloremque nemo sint iure.
-        </p>
+        <hero-component />
       </b-col>
       <b-col class="bg-white shadow m-3 p-3">
         <h3 class="text-center my-4">
@@ -83,7 +80,7 @@
           <b-button type="reset" variant="danger" class="mx-2">
             Reset
           </b-button>
-          <router-link :to="{ name: 'Login'}" tag="p" class="link-tag">
+          <router-link :to="{ name: 'Login'}" class="my-2">
             Already a member ? Please login here!
           </router-link>
         </b-form>
@@ -93,8 +90,13 @@
 </template>
 
 <script>
+import HeroComponent from '../../components/common/hero.vue';
+
 export default {
   name: 'RegisterPage',
+  components: {
+    HeroComponent,
+  },
   data() {
     return {
       form: {
@@ -116,12 +118,14 @@ export default {
         this.form.confirm_password = '';
         const newUser = await this.$http.post('users/signup', this.form);
         if (newUser) {
-          this.$router.push({ name: 'Login' });
           this.$bvToast.toast('You have been successfully registered, please login to continue.', {
             title: 'Success Message',
             autoHideDelay: 6000,
             variant: 'success',
           });
+          this.$router.push({ name: 'Login' });
+        } else {
+          console.log('Some error while register');
         }
       }
       this.errors = [];

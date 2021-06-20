@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Vue from 'vue';
+import router from '../router';
 
 let baseURL = process.env.VUE_APP_API_URL;
 if (!baseURL) {
@@ -36,18 +37,28 @@ httpClient.interceptors.response.use((response) => {
         title: 'Unauthorized',
         variant: 'danger',
       });
+      // For 401 and 403 errors, redirect to login page
+      router.push({ name: 'Login' });
     } else if (error.response.status === 403) {
       Vm.$bvToast.toast('You are not allowed to visit this content.', {
         title: 'Access not allowed',
         variant: 'danger',
       });
+      router.push({ name: 'Login' });
+    } else if (error.response.status === 409) {
+      console.log('Resource exists ');
+      Vm.$bvToast.toast(error.response.message, {
+        title: 'Resource already exists',
+        variant: 'danger',
+      });
     }
-  } else {
-    Vm.$bvToast.toast('Unable to connect to the server', {
-      title: 'Network error',
-      variant: 'danger',
-    });
+    return Promise.reject(error);
   }
+  Vm.$bvToast.toast('Unable to connect to the server', {
+    title: 'Network error',
+    variant: 'danger',
+  });
+  return Promise.reject(error);
 });
 
 export default httpClient;

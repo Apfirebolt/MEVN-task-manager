@@ -1,14 +1,17 @@
 <template>
-  <b-container class="container auth-form mx-auto p-3 my-3">
-    <p>
-      Profile Page, update settings from here
-    </p>
+  <b-container v-if="profileData" class="container auth-form mx-auto p-3 my-3">
+    <profile-detail-component :user-data="profileData" />
   </b-container>
 </template>
 
 <script>
+import ProfileDetailComponent from '../../components/auth/profile-details.vue';
+
 export default {
   name: 'ProfilePage',
+  components: {
+    ProfileDetailComponent,
+  },
   data() {
     return {
       profileData: null,
@@ -21,7 +24,6 @@ export default {
     async getProfileData() {
       const response = await this.$http.get('users/profile');
       if (response) {
-        console.log('Profile data ', response);
         this.profileData = response;
       }
     },
