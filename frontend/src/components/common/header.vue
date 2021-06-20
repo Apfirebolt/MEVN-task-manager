@@ -6,7 +6,10 @@
       </router-link>
     </b-navbar-nav>
     <b-navbar-nav>
-      <b-nav-item class="font-weight-bold" @click="logOut">
+      <b-nav-item class="font-weight-bold" @click.prevent="goToProfileDashboard">
+        Dashboard
+      </b-nav-item>
+      <b-nav-item class="font-weight-bold" @click.prevent="logOut">
         Log Out
       </b-nav-item>
     </b-navbar-nav>
@@ -36,6 +39,9 @@ export default {
       });
       window.localStorage.removeItem('access_token');
       this.$router.push({ name: 'Login' });
+    },
+    goToProfileDashboard() {
+      this.$router.push({ name: 'profile_dashboard' });
     },
   },
 };

@@ -11,6 +11,7 @@
         Update Profile Settings
       </b-button>
     </b-container>
+    <task-list-component v-if="tasks.length" :tasks="tasks" />
     <b-modal v-model="createTaskModal" hide-footer hide-header>
       <create-task-modal @createTask="createTask" @closeDeleteModal="createTaskModal = false" />
     </b-modal>
@@ -19,16 +20,23 @@
 
 <script>
 import createTaskModal from '../../components/tasks/task-form.vue';
+import TaskListComponent from '../../components/tasks/task-list.vue';
 
 export default {
   name: 'DashboardPage',
   components: {
     createTaskModal,
+    TaskListComponent,
   },
   data() {
     return {
       createTaskModal: false,
+      tasks: [],
+      total: 0,
     };
+  },
+  mounted() {
+    this.getTasks();
   },
   methods: {
     async createTask(payload) {
@@ -39,6 +47,15 @@ export default {
           autoHideDelay: 6000,
           variant: 'success',
         });
+        this.createTaskModal = false;
+        await this.getTasks();
+      }
+    },
+    async getTasks() {
+      const taskResponse = await this.$http.get('tasks');
+      if (taskResponse) {
+        this.tasks = taskResponse.results;
+        this.total = taskResponse.total;
       }
     },
     navigateToProfile() {

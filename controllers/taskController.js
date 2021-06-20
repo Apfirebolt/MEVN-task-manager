@@ -1,84 +1,104 @@
-import Task from '../models/taskModel.js'
+const Task = require('../models/taskModel.js');
 
 module.exports.createTask = (async (req, res) => {
-    const { name, description } = req.body
+    try {
+        const { name, description, status, priority, dueDate } = req.body
 
-    const categoryExists = await Category.findOne({ name })
+        const taskExists = await Task.findOne({ name })
 
-    if (categoryExists) {
-        res.status(409)
-        throw new Error('Category already exists')
-    }
+        if (taskExists) {
+            res.status(409)
+            throw new Error('Task already exists')
+        }
 
-    const category = await Category.create({
-        name,
-        description,
-    })
-
-    if (category) {
-        res.status(201).json({
-            _id: category._id,
-            name: category.name,
-            description: category.description,
+        const task = await Task.create({
+            createdBy: req.user._id,
+            name,
+            description,
+            status,
+            priority,
+            dueDate
         })
-    } else {
-        res.status(400)
-        throw new Error('Invalid category data')
+
+        if (task) {
+            res.status(201).json({
+                message: 'Task successfully created',
+                data: task
+            })
+        } else {
+            res.status(400)
+            throw new Error('Invalid task data')
+        }
+    } catch(err) {
+        res.status(400).json({
+            success: false,
+            message: err.message ? err.message : 'Something went wrong'
+        })
     }
 })
 
 module.exports.listTask = (async (req, res) => {
+    try {
+        const tasks = await Task.find({})
+        res.status(200).json({
+            results: tasks,
+            total: tasks.length
+        })
+    } catch(err) {
+        res.status(400).json({
+            success: false,
+            message: err.message ? err.message : 'Something went wrong'
+        })
+    }
+})
+
+module.exports.getTask = (async (req, res) => {
     const task = await Task.findById(req.params.id)
 
     if (task) {
-        await category.remove()
-        res.json({ message: 'Category removed' })
+        res.status(200).json({ task });
     } else {
         res.status(404)
-        throw new Error('Category not found')
+        throw new Error('Task not found')
     }
-})
-
-module.exports.getTask = asyncHandler(async (req, res) => {
-    const category = await Category.findById(req.params.id)
-
-    if (category) {
-        await category.remove()
-        res.json({ message: 'Category removed' })
-    } else {
-        res.status(404)
-        throw new Error('Category not found')
-    }
-})
+});
 
 module.exports.updateTask = (async (req, res) => {
-    const category = await Category.findById(req.params.id)
-
-    if (category) {
-        category.name = req.body.category || category.name
-        category.description = req.body.description || category.description
-
-        const updatedCategory = await category.save()
-
-        res.json({
-            _id: updatedCategory._id,
-            name: updatedCategory.name,
-            description: updatedCategory.description,
+    try {
+        const updatedTask = await Task.findOneAndUpdate({_id: req.params.id}, req.body, {
+            returnOriginal: false
+        });
+        if (updatedTask) {
+            res.status(200).json({
+                message: 'Task successfully updated',
+                data: updatedTask
+            })
+        }
+    } catch(err) {
+        res.status(400).json({
+            success: false,
+            message: err.message ? err.message : 'Something went wrong'
         })
-    } else {
-        res.status(404)
-        throw new Error('Category not found')
     }
-})
+});
 
 module.exports.deleteTask = (async (req, res) => {
-    const task = await Task.findById(req.params.id)
+   try {
+       const taskDeleted = await Task.findOneAndDelete({_id: req.params.id});
 
-    if (task) {
-        await task.remove()
-        res.json({ message: 'Task removed' })
-    } else {
-        res.status(404)
-        throw new Error('Category not found')
-    }
-})
+       if (taskDeleted) {
+           res.status(200).json({
+               success: true,
+               message: 'Task removed'
+           })
+       } else {
+           res.status(404)
+           throw new Error('Task not found')
+       }
+   } catch(err) {
+       res.status(400).json({
+           success: false,
+           message: err.message ? err.message : 'Something went wrong'
+       })
+   }
+});

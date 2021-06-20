@@ -7,7 +7,7 @@ const {
     getTask,
     listTask,
 } = require('../controllers/taskController.js');
-import { protect } from '../middleware/authMiddleware.js'
+const { protect } = require('../middleware/authMiddleware.js');
 
 const router = express.Router()
 
@@ -19,5 +19,5 @@ router
     .put(protect, updateTask)
     .delete(protect, deleteTask)
 
-export default router
+module.exports = router
 
