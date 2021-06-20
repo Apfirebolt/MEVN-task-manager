@@ -13,10 +13,10 @@
         </template>
         <template #cell(actions)="row" class="d-flex justify-content-center">
           <div class="d-flex justify-content-between">
-            <b-button size="sm" class="mr-2" @click.prevent="editTask(row.item)">
+            <b-button size="sm" class="mr-2 custom-width" @click.prevent="editTask(row.item)">
               Edit
             </b-button>
-            <b-button size="sm" class="mr-2" variant="danger" @click.prevent="deleteTask(row.item)">
+            <b-button size="sm" class="mr-2 custom-width" variant="danger" @click.prevent="deleteTask(row.item)">
               Delete
             </b-button>
           </div>
@@ -45,7 +45,13 @@ export default {
   },
   data() {
     return {
-      fields: ['index', 'name', 'description', 'status', 'priority', 'dueDate', 'Actions'],
+      fields: ['index', {
+        key: 'name',
+        sortable: true,
+      }, 'status', 'priority', {
+        key: 'dueDate',
+        sortable: true,
+      }, 'Actions'],
     };
   },
   methods: {
@@ -58,3 +64,8 @@ export default {
   },
 };
 </script>
+<style>
+.custom-width {
+  width: 45%;
+}
+</style>

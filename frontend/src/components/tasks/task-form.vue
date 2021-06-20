@@ -50,11 +50,12 @@
         label-for="task_description"
         description="Please describe the task briefly."
       >
-        <b-form-input
+        <b-form-textarea
           id="task_description"
           v-model="task.description"
-          type="text"
           placeholder="Enter Task Description"
+          rows="3"
+          max-rows="6"
         />
       </b-form-group>
       <b-form-group
@@ -62,7 +63,7 @@
         label-for="due_date"
         description="Please specify deadline for the task."
       >
-        <b-form-input
+        <b-form-datepicker
           id="task_description"
           v-model="task.dueDate"
           type="date"

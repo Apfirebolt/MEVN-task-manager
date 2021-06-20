@@ -3,7 +3,7 @@
     <h3 class="text-center">
       TASK MANAGER APP
     </h3>
-    <p>
+    <p class="text-center my-3 text-success">
       Create Tasks and Manage your Priorities
     </p>
   </b-container>

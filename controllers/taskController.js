@@ -4,7 +4,7 @@ module.exports.createTask = (async (req, res) => {
     try {
         const { name, description, status, priority, dueDate } = req.body
 
-        const taskExists = await Task.findOne({ name })
+        const taskExists = await Task.findOne({ name, createdBy: req.user._id })
 
         if (taskExists) {
             res.status(409)
