@@ -36,6 +36,7 @@ module.exports = {
     'vue/no-spaces-around-equal-signs-in-attribute': 'error',
     'vue/v-bind-style': 'error',
     'vue/v-on-style': 'error',
+    'no-underscore-dangle': 'off',
     'vue/singleline-html-element-content-newline': 'error',
     'vue/component-name-in-template-casing': ['error', 'kebab-case', {
       ignores: [],

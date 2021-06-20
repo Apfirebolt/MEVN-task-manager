@@ -1,7 +1,7 @@
 <template>
   <b-container class="container auth-form mx-auto p-3 my-3">
     <h3 class="heading my-3">
-      CREATE NEW TASK
+      {{ mode === 'create' ? 'CREATE NEW TASK' : 'EDIT TASK' }}
     </h3>
     <b-form @submit.prevent="createTask" @reset="onReset">
       <b-row>
@@ -73,12 +73,14 @@
       <p v-for="(eachError, index) in errors" :key="index" class="alert-danger p-2">
         {{ eachError }}
       </p>
-      <b-button type="submit" variant="primary">
-        Submit
-      </b-button>
-      <b-button type="reset" variant="danger" class="mx-2">
-        Reset
-      </b-button>
+      <b-row class="justify-content-between">
+        <b-button type="submit" variant="primary">
+          Submit
+        </b-button>
+        <b-button type="reset" variant="danger">
+          Reset
+        </b-button>
+      </b-row>
     </b-form>
   </b-container>
 </template>
@@ -87,6 +89,13 @@
 
 export default {
   name: 'CreateTaskForm',
+  props: {
+    taskObject: {
+      type: Object,
+      required: false,
+      default: null,
+    },
+  },
   data() {
     return {
       task: {
@@ -99,7 +108,14 @@ export default {
       status_choices: ['To Do', 'Completed', 'In Progress', 'In Revision'],
       priority_choices: ['Low', 'Medium', 'High', 'Critical'],
       errors: [],
+      mode: 'create',
     };
+  },
+  mounted() {
+    if (this.taskObject) {
+      this.mode = 'edit';
+      this.task = this.taskObject;
+    }
   },
   methods: {
     async createTask() {
@@ -111,7 +127,11 @@ export default {
         this.errors.push('Task Description is required.');
       }
       if (this.task.name && this.task.description) {
-        this.$emit('createTask', this.task);
+        if (this.mode === 'create') {
+          this.$emit('createTask', this.task);
+        } else {
+          this.$emit('editTask', this.task);
+        }
       }
     },
     onReset() {

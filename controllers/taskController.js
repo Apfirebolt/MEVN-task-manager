@@ -39,7 +39,7 @@ module.exports.createTask = (async (req, res) => {
 
 module.exports.listTask = (async (req, res) => {
     try {
-        const tasks = await Task.find({})
+        const tasks = await Task.find({createdBy: req.user._id})
         res.status(200).json({
             results: tasks,
             total: tasks.length
@@ -53,7 +53,7 @@ module.exports.listTask = (async (req, res) => {
 })
 
 module.exports.getTask = (async (req, res) => {
-    const task = await Task.findById(req.params.id)
+    const task = await Task.findOne({createdBy: req.user._id, _id: req.params.id})
 
     if (task) {
         res.status(200).json({ task });
@@ -65,7 +65,7 @@ module.exports.getTask = (async (req, res) => {
 
 module.exports.updateTask = (async (req, res) => {
     try {
-        const updatedTask = await Task.findOneAndUpdate({_id: req.params.id}, req.body, {
+        const updatedTask = await Task.findOneAndUpdate({_id: req.params.id, createdBy: req.user._id}, req.body, {
             returnOriginal: false
         });
         if (updatedTask) {
@@ -84,7 +84,7 @@ module.exports.updateTask = (async (req, res) => {
 
 module.exports.deleteTask = (async (req, res) => {
    try {
-       const taskDeleted = await Task.findOneAndDelete({_id: req.params.id});
+       const taskDeleted = await Task.findOneAndDelete({_id: req.params.id, createdBy: req.user._id});
 
        if (taskDeleted) {
            res.status(200).json({
